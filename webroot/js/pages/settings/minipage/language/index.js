@@ -26,7 +26,7 @@ async function _getLanguageData(lang_file) {
 }
 
 export async function loadOnce() {
-  const langListCmd = await exec('/system/bin/ls /data/adb/modules/rezygisk/webroot/lang')
+  const langListCmd = await exec('/system/bin/ls /data/adb/modules/brezygisk/webroot/lang')
   if (langListCmd.errno !== 0) {
     toast('Error getting language list!')
 

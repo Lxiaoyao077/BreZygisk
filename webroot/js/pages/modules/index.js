@@ -4,7 +4,7 @@ import { whichCurrentPage } from '../navbar.js'
 import { getStrings } from '../pageLoader.js'
 
 async function _getReZygiskState() {
-  let stateCmd = await exec('/system/bin/cat /data/adb/rezygisk/state.json')
+  let stateCmd = await exec('/system/bin/cat /data/adb/brezygisk/state.json')
   if (stateCmd.errno !== 0) {
     toast('Error getting state of ReZygisk!')
 
