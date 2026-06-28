@@ -31,5 +31,5 @@ jobs:
       - name: Upload debug
         uses: actions/upload-artifact@v7
         with:
-          path: "build/out/ReZygisk-v*-debug.zip"
+          path: "build/out/BreZygisk-*-debug.zip"
           archive: false
