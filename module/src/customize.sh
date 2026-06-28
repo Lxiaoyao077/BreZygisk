@@ -120,40 +120,19 @@ else
   CPU_ABIS=$CPU_ABIS_PROP1
 fi
 
-SUPPORTS_32BIT=false
 SUPPORTS_64BIT=false
-
-if [[ "$CPU_ABIS" == *"x86"* && "$CPU_ABIS" != "x86_64" || "$CPU_ABIS" == *"armeabi"* ]]; then
-  SUPPORTS_32BIT=true
-  ui_print "- Device supports 32-bit"
-fi
 
 if [[ "$CPU_ABIS" == *"x86_64"* || "$CPU_ABIS" == *"arm64-v8a"* ]]; then
   SUPPORTS_64BIT=true
   ui_print "- Device supports 64-bit"
 fi
 
-if [ "$SUPPORTS_32BIT" = true ]; then
-  mkdir "$MODPATH/lib"
-fi
-
 if [ "$SUPPORTS_64BIT" = true ]; then
   mkdir "$MODPATH/lib64"
 fi
 
-if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
-  if [ "$SUPPORTS_32BIT" = true ]; then
-    ui_print "- Extracting x86 libraries"
-    extract "$ZIPFILE" 'bin/x86/zygiskd' "$MODPATH/bin" true
-    mv "$MODPATH/bin/zygiskd" "$MODPATH/bin/zygiskd32"
-    extract "$ZIPFILE" 'lib/x86/libzygisk.so' "$MODPATH/lib" true
-    extract "$ZIPFILE" 'lib/x86/libzygisk_ptrace.so' "$MODPATH/bin" true
-    mv "$MODPATH/bin/libzygisk_ptrace.so" "$MODPATH/bin/zygisk-ptrace32"
-
-    extract "$ZIPFILE" 'machikado.x86' "$MODPATH" true
-  fi
-
-  if [ "$SUPPORTS_64BIT" = true ]; then
+if [ "$SUPPORTS_64BIT" = true ]; then
+  if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
     ui_print "- Extracting x64 libraries"
     extract "$ZIPFILE" 'bin/x86_64/zygiskd' "$MODPATH/bin" true
     mv "$MODPATH/bin/zygiskd" "$MODPATH/bin/zygiskd64"
@@ -162,20 +141,7 @@ if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
     mv "$MODPATH/bin/libzygisk_ptrace.so" "$MODPATH/bin/zygisk-ptrace64"
 
     extract "$ZIPFILE" 'machikado.x86_64' "$MODPATH" true
-  fi
-else
-  if [ "$SUPPORTS_32BIT" = true ]; then
-    ui_print "- Extracting arm libraries"
-    extract "$ZIPFILE" 'bin/armeabi-v7a/zygiskd' "$MODPATH/bin" true
-    mv "$MODPATH/bin/zygiskd" "$MODPATH/bin/zygiskd32"
-    extract "$ZIPFILE" 'lib/armeabi-v7a/libzygisk.so' "$MODPATH/lib" true
-    extract "$ZIPFILE" 'lib/armeabi-v7a/libzygisk_ptrace.so' "$MODPATH/bin" true
-    mv "$MODPATH/bin/libzygisk_ptrace.so" "$MODPATH/bin/zygisk-ptrace32"
-
-    extract "$ZIPFILE" 'machikado.arm' "$MODPATH" true
-  fi
-
-  if [ "$SUPPORTS_64BIT" = true ]; then
+  else
     ui_print "- Extracting arm64 libraries"
     extract "$ZIPFILE" 'bin/arm64-v8a/zygiskd' "$MODPATH/bin" true
     mv "$MODPATH/bin/zygiskd" "$MODPATH/bin/zygiskd64"
@@ -189,10 +155,6 @@ fi
 
 ui_print "- Setting permissions"
 set_perm_recursive "$MODPATH/bin" 0 0 0755 0755
-
-if [ "$SUPPORTS_32BIT" = true ]; then
-  set_perm_recursive "$MODPATH/lib" 0 0 0755 0644 u:object_r:system_lib_file:s0
-fi
 
 if [ "$SUPPORTS_64BIT" = true ]; then
   set_perm_recursive "$MODPATH/lib64" 0 0 0755 0644 u:object_r:system_lib_file:s0
