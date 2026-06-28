@@ -29,18 +29,14 @@ struct Context {
 #define PATH_MODULES_DIR "/data/adb/modules"
 #define TMP_PATH "/data/adb/rezygisk"
 #define CONTROLLER_SOCKET TMP_PATH "/init_monitor"
-#define PATH_CP_NAME TMP_PATH "/" LP_SELECT("cp32.sock", "cp64.sock")
-#define ZYGISKD_FILE PATH_MODULES_DIR "/rezygisk/bin/zygiskd" LP_SELECT("32", "64")
-#define ZYGISKD_PATH "/data/adb/modules/rezygisk/bin/zygiskd" LP_SELECT("32", "64")
+#define PATH_CP_NAME TMP_PATH "/" "cp64.sock"
+#define ZYGISKD_FILE PATH_MODULES_DIR "/rezygisk/bin/zygiskd64"
+#define ZYGISKD_PATH "/data/adb/modules/rezygisk/bin/zygiskd64"
 
 #ifdef __aarch64__
   #define ARCH_STR "arm64-v8a"
-#elif __arm__
-  #define ARCH_STR "armeabi-v7a"
 #elif __x86_64__
   #define ARCH_STR "x86_64"
-#elif __i386__
-  #define ARCH_STR "x86"
 #else
   #error "Unsupported architecture"
   #define ARCH_STR "unknown"
