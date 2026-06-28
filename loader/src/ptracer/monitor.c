@@ -460,7 +460,6 @@ static bool ensure_daemon_created() {
 #define PRE_INJECT(abi, is_64)                                        \
   if (strcmp(program, APP_PROCESS_ ## abi) == 0) {                    \
     tracer = "./bin/zygisk-ptrace" # abi;                             \
-    is_tango = false;                                                 \
                                                                       \
     if (should_stop_inject ## abi()) {                                \
       LOGW("Zygote" # abi " restart too much times, stop injecting"); \
@@ -483,31 +482,6 @@ static bool ensure_daemon_created() {
     }                                                                 \
   }
 
-#define PRE_INJECT_TANGO                                           \
-  if (strcmp(program, "/system_ext/bin/tango_translator") == 0) {  \
-    tracer = "./bin/zygisk-ptrace32";                              \
-    is_tango = true;                                               \
-                                                                   \
-    if (should_stop_inject32()) {                                  \
-      LOGW("Tango restart too many times, stop injecting");        \
-                                                                   \
-      tracing_state = STOPPING;                                    \
-      monitor_stop_reason = "Zygote crashed";                      \
-      ptrace(PTRACE_INTERRUPT, 1, 0, 0);                           \
-                                                                   \
-      break;                                                       \
-    }                                                              \
-                                                                   \
-    if (!ensure_daemon_created(false)) {                           \
-      LOGW("ReZygiskd 32-bit not running, stop injecting");        \
-                                                                   \
-      tracing_state = STOPPING;                                    \
-      monitor_stop_reason = "ReZygiskd not running";               \
-      ptrace(PTRACE_INTERRUPT, 1, 0, 0);                           \
-                                                                   \
-      break;                                                       \
-    }                                                              \
-  }
 
 int sigchld_signal_fd;
 struct signalfd_siginfo sigchld_fdsi;
