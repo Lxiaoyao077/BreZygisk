@@ -15,6 +15,11 @@ jobs:
           submodules: "recursive"
           fetch-depth: 0
 
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/rrr333nnn333/BreZygisk.git
+          git fetch upstream main
+
       - name: Setup NDK_PATH
         run: echo "NDK_PATH=$ANDROID_NDK_LATEST_HOME" >> $GITHUB_ENV
 
