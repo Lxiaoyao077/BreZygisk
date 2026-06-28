@@ -18,8 +18,6 @@
 
 #include "remote_csoloader.h"
 
-#ifdef __arm__
-
   /* TODO: I can't express how many detections this likely will have, but
             it is not of high priority. 32-bit apps are going to phase out
             eventually. However, we should investigate possible detections,
