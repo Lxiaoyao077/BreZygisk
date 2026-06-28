@@ -34,12 +34,6 @@ else
   CPU_ABIS=$CPU_ABIS_PROP1
 fi
 
-if [[ "$CPU_ABIS" == *"arm64-v8a"* || "$CPU_ABIS" == *"x86_64"* ]]; then
-  ./bin/zygisk-ptrace64 monitor &
-else
-  # INFO: Device is 32-bit only
-
-  ./bin/zygisk-ptrace32 monitor &
-fi
+./bin/zygisk-ptrace64 monitor &
 
 exit 0
